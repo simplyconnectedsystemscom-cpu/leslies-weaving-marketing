@@ -55,7 +55,7 @@ export default async function FabricLandingPage({
   const displayCity = pageData?.city || city.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const displayKeyword = pageData?.keyword || keyword.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
-  const visualizerUrl = "http://localhost:3001/studio";
+  const visualizerUrl = "https://www.lesliesweavingstudio.com/studio";
 
   return (
     <div className="w-full flex flex-col">

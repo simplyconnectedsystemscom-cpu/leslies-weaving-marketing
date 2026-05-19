@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
+import AnalyticsWrapper from "@/components/AnalyticsWrapper";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function LesliesWeavingLayout({
         className={`min-h-screen ${playfair.variable} ${dmSans.variable} font-[family-name:var(--font-dm-sans)] flex flex-col`}
         style={{ background: "oklch(0.975 0.008 75)", color: "oklch(0.22 0.025 55)" }}
       >
+        <AnalyticsWrapper />
       <style>{`
         .font-display { font-family: var(--font-playfair), Georgia, serif; }
         
