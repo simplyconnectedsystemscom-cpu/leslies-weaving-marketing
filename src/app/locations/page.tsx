@@ -39,7 +39,7 @@ export default function LocationsDirectoryPage() {
             Our Service Locations
           </h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            Providing handwoven, 100% cotton fabric with 24-shaft complexity to designers across South Florida. Select a location below to view local services and specifications, or browse our <Link href="/fabric/national" className="text-[#d4af37] hover:underline font-semibold">National Fabric Directory</Link> for trade specifications.
+            Providing handwoven, 100% cotton fabric with 24-shaft complexity to designers across South Florida. Select a location below to view local services and specifications.
           </p>
         </header>
 
