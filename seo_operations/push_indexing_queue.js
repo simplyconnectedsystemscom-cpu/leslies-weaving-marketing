@@ -1,57 +1,72 @@
 const { google } = require('googleapis');
 const path = require('path');
 const fs = require('fs');
-const sqlite3 = require('sqlite3').verbose();
+const { Client } = require('pg');
 
 // Paths to the OAuth2 credentials files in the SimplyMobility root folder
 const SECRETS_PATH = path.join(__dirname, '..', '..', 'client_secrets.json');
 const TOKEN_PATH = path.join(__dirname, '..', '..', 'leslies_oauth_tokens.json');
-const DB_PATH = path.join(__dirname, 'seo_state.db');
 
 // We want exactly 66 URLs per group to hit ~198 total per day
 const URLS_PER_GROUP = 66;
 // Only push URLs that haven't been pushed in the last 7 days
 const PUSH_COOLDOWN_DAYS = 7;
 
-function getBatchFromDB(db, group, limit) {
-    return new Promise((resolve, reject) => {
-        const query = `
-            SELECT url FROM page_indexing
-            WHERE ab_group = ? 
-              AND (last_pushed_at IS NULL OR last_pushed_at <= datetime('now', '-${PUSH_COOLDOWN_DAYS} days'))
-            ORDER BY last_pushed_at ASC /* nulls first, then oldest */
-            LIMIT ?
-        `;
-        db.all(query, [group, limit], (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows.map(r => r.url));
-        });
-    });
+function getDatabaseUrl() {
+    const envPath = path.resolve(__dirname, '..', '.env');
+    if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, 'utf8');
+        for (const line of envContent.split('\n')) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('DATABASE_URL=')) {
+                let val = trimmed.substring('DATABASE_URL='.length).trim();
+                if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                    val = val.substring(1, val.length - 1);
+                }
+                return val;
+            }
+        }
+    }
+    return process.env.DATABASE_URL;
 }
 
-function updateUrlStatus(db, url, status, errorMessage = null) {
-    return new Promise((resolve, reject) => {
-        const query = `
-            UPDATE page_indexing
-            SET last_pushed_at = CURRENT_TIMESTAMP, status = ?, error_message = ?
-            WHERE url = ?
-        `;
-        db.run(query, [status, errorMessage, url], (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
+async function getBatchFromDB(client, group, limit) {
+    const query = `
+        SELECT url FROM page_indexing
+        WHERE ab_group = $1 
+          AND (last_pushed_at IS NULL OR last_pushed_at <= NOW() - INTERVAL '${PUSH_COOLDOWN_DAYS} days')
+        ORDER BY last_pushed_at ASC NULLS FIRST
+        LIMIT $2
+    `;
+    const res = await client.query(query, [group, limit]);
+    return res.rows.map(r => r.url);
+}
+
+async function updateUrlStatus(client, url, status, errorMessage = null) {
+    const query = `
+        UPDATE page_indexing
+        SET last_pushed_at = CURRENT_TIMESTAMP, status = $1, error_message = $2
+        WHERE url = $3
+    `;
+    await client.query(query, [status, errorMessage, url]);
 }
 
 async function main() {
-    console.log("Connecting to Leslie's SEO State Database...");
-    const db = new sqlite3.Database(DB_PATH);
+    const connStr = getDatabaseUrl();
+    if (!connStr) {
+        console.error("Error: DATABASE_URL not found.");
+        process.exit(1);
+    }
+
+    console.log("Connecting to Leslie's PostgreSQL SEO Database...");
+    const client = new Client({ connectionString: connStr });
+    await client.connect();
 
     try {
         console.log(`Querying ${URLS_PER_GROUP} URLs for each group (A, B, C)...`);
-        const groupA = await getBatchFromDB(db, 'A', URLS_PER_GROUP);
-        const groupB = await getBatchFromDB(db, 'B', URLS_PER_GROUP);
-        const groupC = await getBatchFromDB(db, 'C', URLS_PER_GROUP);
+        const groupA = await getBatchFromDB(client, 'A', URLS_PER_GROUP);
+        const groupB = await getBatchFromDB(client, 'B', URLS_PER_GROUP);
+        const groupC = await getBatchFromDB(client, 'C', URLS_PER_GROUP);
 
         const urlsToPush = [...groupA, ...groupB, ...groupC];
         console.log(`Found ${groupA.length} for Group A.`);
@@ -100,12 +115,12 @@ async function main() {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 
-                await updateUrlStatus(db, url, 'success');
+                await updateUrlStatus(client, url, 'success');
                 successCount++;
                 console.log(`[SUCCESS] Pushed: ${url}`);
             } catch (err) {
                 failCount++;
-                await updateUrlStatus(db, url, 'failed', err.message);
+                await updateUrlStatus(client, url, 'failed', err.message);
                 console.log(`[FAILED] ${url} - ${err.message}`);
                 
                 if (err.message.includes('Indexing API has not been used')) {
@@ -123,8 +138,8 @@ async function main() {
     } catch (e) {
         console.error("Script failed:", e.message);
     } finally {
-        db.close();
+        await client.end();
     }
 }
 
-main();
+main().catch(console.error);

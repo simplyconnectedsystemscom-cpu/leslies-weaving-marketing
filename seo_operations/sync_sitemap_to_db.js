@@ -1,8 +1,26 @@
-const sqlite3 = require('sqlite3').verbose();
+const { Client } = require('pg');
 const path = require('path');
+const fs = require('fs');
 
-const DB_PATH = path.join(__dirname, 'seo_state.db');
 const SITEMAP_URL = 'https://lesliesweavingstudio.com/sitemap-marketing.xml';
+
+function getDatabaseUrl() {
+    const envPath = path.resolve(__dirname, '..', '.env');
+    if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, 'utf8');
+        for (const line of envContent.split('\n')) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('DATABASE_URL=')) {
+                let val = trimmed.substring('DATABASE_URL='.length).trim();
+                if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                    val = val.substring(1, val.length - 1);
+                }
+                return val;
+            }
+        }
+    }
+    return process.env.DATABASE_URL;
+}
 
 async function syncSitemap() {
     console.log(`Fetching sitemap from ${SITEMAP_URL}...`);
@@ -31,40 +49,30 @@ async function syncSitemap() {
             return;
         }
 
-        const db = new sqlite3.Database(DB_PATH);
-        
-        db.serialize(() => {
+        const connStr = getDatabaseUrl();
+        if (!connStr) {
+            console.error("Error: DATABASE_URL not found.");
+            process.exit(1);
+        }
+
+        const pgClient = new Client({ connectionString: connStr });
+        await pgClient.connect();
+
+        try {
             // Purge old invalid shorthand URLs first (no additional slash after /fabric/)
-            db.run(`
+            const purgeRes1 = await pgClient.query(`
                 DELETE FROM page_indexing 
                 WHERE url LIKE '%/fabric/%' AND url NOT LIKE '%/fabric/%/%'
-            `, function(err) {
-                if (err) {
-                    console.error("Failed to purge invalid shorthand URLs:", err.message);
-                } else {
-                    console.log(`Purged ${this.changes} invalid shorthand URLs from the indexing queue.`);
-                }
-            });
+            `);
+            console.log(`Purged ${purgeRes1.rowCount} invalid shorthand URLs from the indexing queue.`);
 
             // Purge old non-www URLs (to prevent duplicate queue entries)
-            db.run(`
+            const purgeRes2 = await pgClient.query(`
                 DELETE FROM page_indexing 
                 WHERE url LIKE 'https://lesliesweavingstudio.com/%'
-            `, function(err) {
-                if (err) {
-                    console.error("Failed to purge non-www URLs:", err.message);
-                } else {
-                    console.log(`Purged ${this.changes} non-www URLs from the indexing queue.`);
-                }
-            });
-
-            db.run('BEGIN TRANSACTION');
-            
-            const stmt = db.prepare(`
-                INSERT OR IGNORE INTO page_indexing (url, ab_group) 
-                VALUES (?, ?)
             `);
-            
+            console.log(`Purged ${purgeRes2.rowCount} non-www URLs from the indexing queue.`);
+
             let inserted = 0;
             const groups = ['A', 'B', 'C'];
             
@@ -73,28 +81,28 @@ async function syncSitemap() {
                 // Randomly assign A, B, or C to split the load for the API
                 const group = groups[i % 3]; 
                 
-                stmt.run(url, group, function(err) {
-                    if (!err && this.changes > 0) {
-                        inserted++;
-                    }
-                });
+                const insertQuery = `
+                    INSERT INTO page_indexing (url, ab_group) 
+                    VALUES ($1, $2)
+                    ON CONFLICT (url) DO NOTHING
+                `;
+                const res = await pgClient.query(insertQuery, [url, group]);
+                if (res.rowCount > 0) {
+                    inserted++;
+                }
             }
             
-            stmt.finalize();
-            
-            db.run('COMMIT', (err) => {
-                if (err) {
-                    console.error("Transaction commit failed:", err);
-                } else {
-                    console.log(`Sitemap sync complete. Added ${inserted} new URLs to the queue.`);
-                }
-                db.close();
-            });
-        });
+            console.log(`Sitemap sync complete. Added ${inserted} new URLs to the queue.`);
+
+        } catch (dbErr) {
+            console.error("Database operation failed:", dbErr.message);
+        } finally {
+            await pgClient.end();
+        }
 
     } catch (error) {
         console.error("Error syncing sitemap:", error.message);
     }
 }
 
-syncSitemap();
+syncSitemap().catch(console.error);
