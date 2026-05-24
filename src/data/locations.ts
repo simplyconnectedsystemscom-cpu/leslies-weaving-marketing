@@ -32,7 +32,7 @@ export interface LocationPage {
 
 // ─── City definitions ────────────────────────────────────────────────────────
 
-const CITIES: Array<{
+export const CITIES: Array<{
   city: string;
   county: string;
   state?: string;

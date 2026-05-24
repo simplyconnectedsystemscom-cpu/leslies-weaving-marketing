@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import { LOCATION_PAGES } from "@/data/locations";
+import Link from "next/link";
+import { LOCATION_PAGES, CITIES } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
@@ -59,6 +60,11 @@ export default async function FabricLandingPage({
   const displayKeyword = pageData?.keyword || keyword.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
   const visualizerUrl = "https://www.lesliesweavingstudio.com/studio";
+
+  const pageDef = pageData ? CITIES.find(c => c.city.toLowerCase() === pageData.city.toLowerCase()) : null;
+  const neighborCities = pageDef?.neighbors
+    .map(name => CITIES.find(c => c.city.toLowerCase() === name.toLowerCase()))
+    .filter((c): c is NonNullable<typeof c> => !!c) || [];
 
   return (
     <div className="w-full flex flex-col">
@@ -135,6 +141,31 @@ export default async function FabricLandingPage({
                 <p className="text-lg leading-relaxed" style={{ color: "oklch(0.35 0.02 58)" }}>
                   We weave custom {displayKeyword.toLowerCase()} for discerning designers in {displayCity}. Use our interactive 3D studio below to begin visualizing your bespoke commission.
                 </p>
+              )}
+
+              {/* Related Service Areas */}
+              {neighborCities.length > 0 && (
+                <div className="mt-12 pt-8 border-t" style={{ borderColor: "oklch(0.87 0.015 65)" }}>
+                  <span className="text-xs font-semibold tracking-widest uppercase block mb-4" style={{ color: "oklch(0.52 0.13 35)" }}>
+                    Related Service Areas
+                  </span>
+                  <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
+                    {neighborCities.map((neighbor) => {
+                      const neighborSlug = neighbor.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                      return (
+                        <Link 
+                          key={neighbor.city}
+                          href={`/fabric/${neighborSlug}/${keyword}`}
+                          className="transition-colors hover:opacity-80 flex items-center gap-1"
+                          style={{ color: "oklch(0.52 0.13 35)" }}
+                        >
+                          <span>{displayKeyword} in {neighbor.city}</span>
+                          <span className="text-xs">&rarr;</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </div>
 

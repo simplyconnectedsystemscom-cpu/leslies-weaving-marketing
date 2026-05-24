@@ -90,6 +90,56 @@ export default function LesliesWeavingLayout({
         {children}
       </main>
 
+      {/* ── Brand Footer ────────────────────────────────────────────────── */}
+      <footer 
+        className="w-full py-16 mt-auto"
+        style={{
+          background: "oklch(0.12 0.02 55)",
+          color: "oklch(0.88 0.01 75)",
+          borderTop: "1px solid oklch(0.25 0.02 55)"
+        }}
+      >
+        <div className="container max-w-[1600px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+          {/* Col 1: About */}
+          <div className="space-y-4">
+            <span className="font-display text-lg font-bold text-white">Leslie's Weaving Studio</span>
+            <p className="text-sm leading-relaxed text-white/60 max-w-sm">
+              Weave bespoke 100% cotton fabric on a 72-inch computerized Dobby loom. Handcrafted quality for interior designers and boutique commissions.
+            </p>
+          </div>
+          {/* Col 2: Navigation Links */}
+          <div className="space-y-4">
+            <span className="text-xs font-semibold tracking-widest uppercase text-white/40">Studio Links</span>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/" className="hover:text-white transition-colors">
+                  Interactive Configurator
+                </Link>
+              </li>
+              <li>
+                <Link href="/locations" className="hover:text-white transition-colors">
+                  Service Locations
+                </Link>
+              </li>
+              <li>
+                <Link href="/brochure" className="hover:text-white transition-colors">
+                  View Digital Brochure
+                </Link>
+              </li>
+            </ul>
+          </div>
+          {/* Col 3: Contact Info */}
+          <div className="space-y-4">
+            <span className="text-xs font-semibold tracking-widest uppercase text-white/40">Contact Info</span>
+            <ul className="space-y-2 text-sm text-white/60">
+              <li>📞 Direct Line: (954) 253-7870</li>
+              <li>📍 Studio: Coral Springs, Florida</li>
+              <li className="pt-2 text-xs text-white/40">&copy; {new Date().getFullYear()} Leslie's Weaving. All rights reserved.</li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+
       </body>
     </html>
   );
