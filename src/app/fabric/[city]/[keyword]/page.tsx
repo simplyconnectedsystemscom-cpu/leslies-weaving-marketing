@@ -34,6 +34,9 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: {
+      canonical: `https://www.lesliesweavingstudio.com/locations/${city}-${keyword}`,
+    },
     openGraph: {
       title,
       description,

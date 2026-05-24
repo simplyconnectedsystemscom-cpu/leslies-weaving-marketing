@@ -25,6 +25,9 @@ export async function generateMetadata({
   return {
     title: `${page.title} | Leslie's Weaving Studio`,
     description: page.description,
+    alternates: {
+      canonical: `https://www.lesliesweavingstudio.com/fabric/national/${matrix}/${slug}`,
+    },
   };
 }
 
