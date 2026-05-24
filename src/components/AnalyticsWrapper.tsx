@@ -44,6 +44,14 @@ export default function AnalyticsWrapper() {
           `,
         }}
       />
+      {process.env.NEXT_PUBLIC_AHREFS_ANALYTICS_KEY && (
+        <Script
+          key="ahrefs-analytics"
+          strategy="afterInteractive"
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key={process.env.NEXT_PUBLIC_AHREFS_ANALYTICS_KEY}
+        />
+      )}
     </>
   );
 }

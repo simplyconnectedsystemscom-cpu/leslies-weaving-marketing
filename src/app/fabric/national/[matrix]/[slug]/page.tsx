@@ -10,8 +10,13 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { matrix: string; slug: string } }): Promise<Metadata> {
-  const page = NATIONAL_PAGES.find((p) => p.matrix === params.matrix && p.slug === params.slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ matrix: string; slug: string }>;
+}): Promise<Metadata> {
+  const { matrix, slug } = await params;
+  const page = NATIONAL_PAGES.find((p) => p.matrix === matrix && p.slug === slug);
   
   if (!page) {
     return { title: 'Not Found' };
@@ -23,8 +28,13 @@ export async function generateMetadata({ params }: { params: { matrix: string; s
   };
 }
 
-export default function NationalPage({ params }: { params: { matrix: string; slug: string } }) {
-  const page = NATIONAL_PAGES.find((p) => p.matrix === params.matrix && p.slug === params.slug);
+export default async function NationalPage({
+  params,
+}: {
+  params: Promise<{ matrix: string; slug: string }>;
+}) {
+  const { matrix, slug } = await params;
+  const page = NATIONAL_PAGES.find((p) => p.matrix === matrix && p.slug === slug);
   
   if (!page) {
     notFound();

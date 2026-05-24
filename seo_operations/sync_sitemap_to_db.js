@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const DB_PATH = path.join(__dirname, 'seo_state.db');
-const SITEMAP_URL = 'https://lesliesweavingstudio.com/sitemap.xml';
+const SITEMAP_URL = 'https://lesliesweavingstudio.com/sitemap-marketing.xml';
 
 async function syncSitemap() {
     console.log(`Fetching sitemap from ${SITEMAP_URL}...`);
@@ -34,6 +34,30 @@ async function syncSitemap() {
         const db = new sqlite3.Database(DB_PATH);
         
         db.serialize(() => {
+            // Purge old invalid shorthand URLs first (no additional slash after /fabric/)
+            db.run(`
+                DELETE FROM page_indexing 
+                WHERE url LIKE '%/fabric/%' AND url NOT LIKE '%/fabric/%/%'
+            `, function(err) {
+                if (err) {
+                    console.error("Failed to purge invalid shorthand URLs:", err.message);
+                } else {
+                    console.log(`Purged ${this.changes} invalid shorthand URLs from the indexing queue.`);
+                }
+            });
+
+            // Purge old non-www URLs (to prevent duplicate queue entries)
+            db.run(`
+                DELETE FROM page_indexing 
+                WHERE url LIKE 'https://lesliesweavingstudio.com/%'
+            `, function(err) {
+                if (err) {
+                    console.error("Failed to purge non-www URLs:", err.message);
+                } else {
+                    console.log(`Purged ${this.changes} non-www URLs from the indexing queue.`);
+                }
+            });
+
             db.run('BEGIN TRANSACTION');
             
             const stmt = db.prepare(`

@@ -6,9 +6,40 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const baseUrl = "https://lesliesweavingstudio.com";
+  const baseUrl = "https://www.lesliesweavingstudio.com";
   
-  const entries: MetadataRoute.Sitemap = [];
+  const entries: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/locations`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/visualizer`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/drafts`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/brochure`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+  ];
 
   // Add Local Pages (240)
   for (const page of LOCATION_PAGES) {
@@ -35,7 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Add National Pages (4000+)
   for (const page of NATIONAL_PAGES) {
     entries.push({
-      url: `${baseUrl}/fabric/${page.slug}`,
+      url: `${baseUrl}/fabric/national/${page.matrix}/${page.slug}`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.6,

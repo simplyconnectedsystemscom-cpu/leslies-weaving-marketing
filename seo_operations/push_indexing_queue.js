@@ -1,9 +1,11 @@
 const { google } = require('googleapis');
 const path = require('path');
+const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 
-// Path to the service account in the SimplyMobility root folder
-const KEY_FILE = path.join(__dirname, '..', '..', 'scs-lead-pipeline-0336a7cafdf1.json');
+// Paths to the OAuth2 credentials files in the SimplyMobility root folder
+const SECRETS_PATH = path.join(__dirname, '..', '..', 'client_secrets.json');
+const TOKEN_PATH = path.join(__dirname, '..', '..', 'leslies_oauth_tokens.json');
 const DB_PATH = path.join(__dirname, 'seo_state.db');
 
 // We want exactly 66 URLs per group to hit ~198 total per day
@@ -62,20 +64,36 @@ async function main() {
             return;
         }
 
-        console.log(`Authenticating with Google Indexing API...`);
-        const auth = new google.auth.GoogleAuth({
-            keyFile: KEY_FILE,
-            scopes: ['https://www.googleapis.com/auth/indexing'],
-        });
+        console.log(`Authenticating with Google Indexing API (OAuth2)...`);
+        if (!fs.existsSync(SECRETS_PATH) || !fs.existsSync(TOKEN_PATH)) {
+            throw new Error(`Missing OAuth2 files! Please ensure client_secrets.json and leslies_oauth_tokens.json exist.`);
+        }
 
-        const authClient = await auth.getClient();
+        const credentials = JSON.parse(fs.readFileSync(SECRETS_PATH));
+        const tokens = JSON.parse(fs.readFileSync(TOKEN_PATH));
+
+        const oauth2Client = new google.auth.OAuth2(
+            credentials.installed.client_id,
+            credentials.installed.client_secret,
+            'http://localhost:8765/oauth2callback'
+        );
+
+        oauth2Client.setCredentials(tokens);
+
+        // Keep tokens fresh
+        oauth2Client.on('tokens', (newTokens) => {
+            console.log('Saving refreshed OAuth2 tokens...');
+            const currentTokens = JSON.parse(fs.readFileSync(TOKEN_PATH));
+            const updated = { ...currentTokens, ...newTokens };
+            fs.writeFileSync(TOKEN_PATH, JSON.stringify(updated, null, 2));
+        });
         
         let successCount = 0;
         let failCount = 0;
 
         for (const url of urlsToPush) {
             try {
-                await authClient.request({
+                await oauth2Client.request({
                     url: 'https://indexing.googleapis.com/v3/urlNotifications:publish',
                     method: 'POST',
                     data: { url: url, type: 'URL_UPDATED' },

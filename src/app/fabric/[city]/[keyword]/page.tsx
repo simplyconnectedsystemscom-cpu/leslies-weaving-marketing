@@ -3,7 +3,7 @@ import { LOCATION_PAGES } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   // Only build this single page for initial production testing
