@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { LOCATION_PAGES } from "@/data/locations";
-import { NATIONAL_PAGES } from "@/data/national-pages";
+
 
 export const dynamic = "force-static";
 
@@ -63,15 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // Add National Pages (4000+)
-  for (const page of NATIONAL_PAGES) {
-    entries.push({
-      url: `${baseUrl}/fabric/national/${page.matrix}/${page.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    });
-  }
+
 
   return entries;
 }

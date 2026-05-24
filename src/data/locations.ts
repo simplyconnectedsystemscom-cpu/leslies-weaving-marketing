@@ -35,6 +35,7 @@ export interface LocationPage {
 const CITIES: Array<{
   city: string;
   county: string;
+  state?: string;
   neighbors: string[];
   character: string; // used to vary body copy
   audienceVariant: "interior" | "fashion" | "judaica" | "interior";
@@ -82,6 +83,18 @@ const CITIES: Array<{
     { city: "Wellington", county: "Palm Beach County", neighbors: ["West Palm Beach", "Loxahatchee", "Royal Palm Beach"], character: "equestrian estates and luxury residential commissions", audienceVariant: "interior" },
     { city: "Lake Worth Beach", county: "Palm Beach County", neighbors: ["Boynton Beach", "West Palm Beach", "Lantana"], character: "arts-forward community with boutique design studios and fashion makers", audienceVariant: "fashion" },
     { city: "Boca Raton Fashion District", county: "Palm Beach County", neighbors: ["Boca Raton", "Delray Beach", "Deerfield Beach"], character: "South Florida's most active market for fashion and costume design", audienceVariant: "fashion" },
+    
+    // National Design Hubs
+    { city: "Dallas", county: "Dallas County", state: "TX", neighbors: ["Fort Worth", "Plano", "University Park"], character: "bold luxury residential and high-end hospitality designs", audienceVariant: "interior" },
+    { city: "Atlanta", county: "Fulton County", state: "GA", neighbors: ["Buckhead", "Decatur", "Midtown"], character: "traditional Southern elegance meets modern design practices", audienceVariant: "interior" },
+    { city: "Los Angeles", county: "Los Angeles County", state: "CA", neighbors: ["Beverly Hills", "West Hollywood", "Santa Monica"], character: "coastal luxury, mid-century modernism, and celebrity residential projects", audienceVariant: "interior" },
+    { city: "New York", county: "New York County", state: "NY", neighbors: ["Brooklyn", "Manhattan", "SoHo"], character: "high-density luxury apartments and world-class commercial projects", audienceVariant: "interior" },
+    { city: "Chicago", county: "Cook County", state: "IL", neighbors: ["Lincoln Park", "Gold Coast", "River North"], character: "historic brownstones and modern architectural commissions", audienceVariant: "interior" },
+    { city: "Boston", county: "Suffolk County", state: "MA", neighbors: ["Back Bay", "Beacon Hill", "Cambridge"], character: "historic townhouse restorations and refined New England estates", audienceVariant: "interior" },
+    { city: "San Francisco", county: "San Francisco County", state: "CA", neighbors: ["Pacific Heights", "Marin County", "Sausalito"], character: "contemporary minimalist designs and historic Victorian homes", audienceVariant: "interior" },
+    { city: "Houston", county: "Harris County", state: "TX", neighbors: ["The Heights", "River Oaks", "West University Place"], character: "expansive estate interiors and modern Southern design style", audienceVariant: "interior" },
+    { city: "Seattle", county: "King County", state: "WA", neighbors: ["Bellevue", "Capitol Hill", "Mercer Island"], character: "Pacific Northwest modernism and sustainable organic luxury interiors", audienceVariant: "interior" },
+    { city: "Denver", county: "Denver County", state: "CO", neighbors: ["Cherry Creek", "Boulder", "LoDo"], character: "mountain modern luxury and elevated rustic-chic designs", audienceVariant: "interior" }
   ];
 
 // ─── Keyword clusters ────────────────────────────────────────────────────────
@@ -90,75 +103,75 @@ const KEYWORDS: Array<{
   keyword: string;
   keywordShort: string;
   slug: string;
-  p1Template: (city: string, character: string, audience: string) => string;
-  p2Template: (city: string, neighbors: string[]) => string;
-  closingTemplate: (city: string, neighbors: string[], county: string) => string;
+  p1Template: (city: string, character: string, audience: string, state: string) => string;
+  p2Template: (city: string, neighbors: string[], state: string) => string;
+  closingTemplate: (city: string, neighbors: string[], county: string, state: string) => string;
 }> = [
     {
       keyword: "Custom Upholstery Fabric",
       keywordShort: "upholstery fabric",
       slug: "custom-upholstery-fabric",
-      p1Template: (city, character, audience) =>
-        `${audience} in ${city} work with some of the most discerning clients in South Florida — clients whose homes reflect ${character}. When a project calls for upholstery fabric that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-      p2Template: (city, neighbors) =>
-        `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton upholstery fabric at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}, ${neighbors[0]}, or anywhere in South Florida.`,
-      closingTemplate: (city, neighbors, county) =>
-        `Serving ${city}, ${neighbors.join(", ")}, and the broader ${county} design community. We bring the sample book to you.`,
+      p1Template: (city, character, audience, state) =>
+        `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for upholstery fabric that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+      p2Template: (city, neighbors, state) =>
+        `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton upholstery fabric at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}, ${neighbors[0]}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+      closingTemplate: (city, neighbors, county, state) =>
+        `Serving ${city}, ${neighbors.join(", ")}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`,
     },
     {
       keyword: "Bespoke Drapery Fabric",
       keywordShort: "drapery fabric",
       slug: "bespoke-drapery-fabric",
-      p1Template: (city, character, audience) =>
-        `${city} interiors are defined by ${character}. When drapery fabric needs to carry a room — reading as luxury from across the space and holding up to South Florida's coastal light — Leslie's Weaving produces bespoke drapery fabric in 100% cotton, woven to your exact pattern and colorway on a 72-inch Dobby loom in Coral Springs.`,
-      p2Template: (city, neighbors) =>
+      p1Template: (city, character, audience, state) =>
+        `${city} interiors are defined by ${character}. When drapery fabric needs to carry a room — reading as luxury from across the space and holding up to ${state === 'FL' ? "South Florida's coastal light" : "intense natural light"} — Leslie's Weaving produces bespoke drapery fabric in 100% cotton, woven to your exact pattern and colorway on a 72-inch Dobby loom in Coral Springs.`,
+      p2Template: (city, neighbors, state) =>
         `With 24-shaft pattern complexity and 77 colorways available, we can match virtually any design direction. No two commissions are alike — your client's drapery fabric will not appear in any other showroom or on any other project in ${city}, ${neighbors[0]}, or anywhere else. Every yard is woven by hand and shipped directly to your studio.`,
-      closingTemplate: (city, neighbors, county) =>
-        `Serving interior designers throughout ${city}, ${neighbors.join(", ")}, and ${county}. Consultations available at your studio or ours in Coral Springs.`,
+      closingTemplate: (city, neighbors, county, state) =>
+        `Serving interior designers throughout ${city}, ${neighbors.join(", ")}, and ${county}. ${state === 'FL' ? 'Consultations available at your studio or ours in Coral Springs.' : 'Consultations available online with samples shipped directly.'}`,
     },
     {
       keyword: "Custom Woven Fabric",
       keywordShort: "custom woven fabric",
       slug: "custom-woven-fabric",
-      p1Template: (city, character, audience) =>
-        `Custom woven fabric is the specification that separates a truly bespoke interior from one that merely uses expensive materials. ${audience} in ${city} — a market defined by ${character} — increasingly specify handwoven fabric because it is the one element that cannot be sourced from any trade showroom. Leslie's Weaving is the only studio in South Florida producing it.`,
-      p2Template: (city, neighbors) =>
+      p1Template: (city, character, audience, state) =>
+        `Custom woven fabric is the specification that separates a truly bespoke interior from one that merely uses expensive materials. ${audience} in ${city} — a market defined by ${character} — increasingly specify handwoven fabric because it is the one element that cannot be sourced from any trade showroom. Leslie's Weaving is the only studio in ${state === 'FL' ? 'South Florida' : 'the region'} producing it.`,
+      p2Template: (city, neighbors, state) =>
         `Our 72-inch Dobby loom in Coral Springs produces custom woven fabric in 100% North American cotton at 24-shaft complexity. We work directly with designers in ${city} and throughout ${neighbors.join(" and ")} to develop patterns, colorways, and yardage specifications from scratch. Minimum order is one yard — maximum is your entire project.`,
-      closingTemplate: (city, neighbors, county) =>
-        `Serving ${city}, ${neighbors.join(", ")}, and all of ${county}. Studio consultations and in-studio visits available — we are 30–60 minutes from most ${county} design offices.`,
+      closingTemplate: (city, neighbors, county, state) =>
+        `Serving ${city}, ${neighbors.join(", ")}, and all of ${county}. ${state === 'FL' ? `we are 30–60 minutes from most ${county} design offices.` : 'Remote consultations and physical samples shipped directly to your office.'}`,
     },
     {
       keyword: "Handwoven Fabric for Interior Designers",
       keywordShort: "handwoven fabric",
       slug: "handwoven-fabric-interior-designers",
-      p1Template: (city, character, audience) =>
+      p1Template: (city, character, audience, state) =>
         `Handwoven fabric occupies a category of its own in the specification hierarchy. For ${audience} in ${city} — where ${character} — it is the material that clients remember long after the project is complete. Leslie's Weaving produces handwoven fabric on a 72-inch computerized Dobby loom in Coral Springs, FL, with patterns and colorways exclusive to each commission.`,
-      p2Template: (city, neighbors) =>
+      p2Template: (city, neighbors, state) =>
         `Every yard we produce is woven by hand, inspected by hand, and documented with a certificate of origin. We serve designers in ${city}, ${neighbors[0]}, and ${neighbors[1]} with studio consultations, sample yardage, and full production runs. Our 100% North American cotton weaves at 24-shaft complexity — a specification no trade showroom in the Southeast can match.`,
-      closingTemplate: (city, neighbors, county) =>
-        `Serving handwoven fabric clients throughout ${city}, ${neighbors.join(", ")}, and ${county}. We bring the sample book to your studio — no minimum for consultations.`,
+      closingTemplate: (city, neighbors, county, state) =>
+        `Serving handwoven fabric clients throughout ${city}, ${neighbors.join(", ")}, and ${county}. ${state === 'FL' ? 'We bring the sample book to your studio — no minimum for consultations.' : 'Digital consultations available with custom samples shipped to your studio.'}`,
     },
     {
       keyword: "Custom Textile Studio",
       keywordShort: "custom textile studio",
       slug: "custom-textile-studio",
-      p1Template: (city, character, audience) =>
-        `${city}'s design community — shaped by ${character} — deserves a textile studio that works the way the best designers do: from first principles, with no catalog and no compromises. Leslie's Weaving is a custom textile studio in Coral Springs serving ${audience} throughout South Florida with handwoven fabric produced to specification on a 72-inch Dobby loom.`,
-      p2Template: (city, neighbors) =>
+      p1Template: (city, character, audience, state) =>
+        `${city}'s design community — shaped by ${character} — deserves a textile studio that works the way the best designers do: from first principles, with no catalog and no compromises. Leslie's Weaving is a custom textile studio in Coral Springs serving ${audience} throughout ${state === 'FL' ? 'South Florida' : 'the country'} with handwoven fabric produced to specification on a 72-inch Dobby loom.`,
+      p2Template: (city, neighbors, state) =>
         `We are not a showroom and we are not a fabric retailer. We are a working studio — one loom, one weaver, one commission at a time. Designers in ${city} and ${neighbors.join(", ")} work with us from concept through delivery: pattern development, colorway selection from 77 Maurice Brassard cotton colors, yardage production, and direct shipping to your studio or your client's address.`,
-      closingTemplate: (city, neighbors, county) =>
-        `Leslie's Weaving serves ${city}, ${neighbors.join(", ")}, and all of ${county}. Studio visits welcome in Coral Springs — or we come to you.`,
+      closingTemplate: (city, neighbors, county, state) =>
+        `Leslie's Weaving serves ${city}, ${neighbors.join(", ")}, and all of ${county}. ${state === 'FL' ? 'Studio visits welcome in Coral Springs — or we come to you.' : 'Digital consultations available and samples shipped nationwide.'}`,
     },
     {
       keyword: "Luxury Fabric for Interior Design",
       keywordShort: "luxury fabric",
       slug: "luxury-fabric-interior-design",
-      p1Template: (city, character, audience) =>
-        `Luxury fabric for interior design is not about price — it is about provenance. ${audience} in ${city}, where ${character}, understand that the most exclusive material is the one that was made for a single client, on a single loom, by a single maker. Leslie's Weaving produces luxury handwoven fabric in Coral Springs, FL, for designers throughout South Florida.`,
-      p2Template: (city, neighbors) =>
+      p1Template: (city, character, audience, state) =>
+        `Luxury fabric for interior design is not about price — it is about provenance. ${audience} in ${city}, where ${character}, understand that the most exclusive material is the one that was made for a single client, on a single loom, by a single maker. Leslie's Weaving produces luxury handwoven fabric in Coral Springs, FL, for designers throughout ${state === 'FL' ? 'South Florida' : 'the country'}.`,
+      p2Template: (city, neighbors, state) =>
         `Our fabric is 100% North American cotton, woven at 24-shaft complexity on a 72-inch computerized Dobby loom. We produce upholstery fabric, drapery fabric, wall panel fabric, and yardage for fashion and ceremonial commissions. Designers in ${city}, ${neighbors[0]}, and ${neighbors[1]} receive the same service: a studio consultation, a custom sample, and a production run that belongs to their client alone.`,
-      closingTemplate: (city, neighbors, county) =>
-        `Serving luxury interior design clients in ${city}, ${neighbors.join(", ")}, and throughout ${county}. Schedule a consultation — we bring the sample book to you.`,
+      closingTemplate: (city, neighbors, county, state) =>
+        `Serving luxury interior design clients in ${city}, ${neighbors.join(", ")}, and throughout ${county}. ${state === 'FL' ? 'Schedule a consultation — we bring the sample book to you.' : 'Custom samples shipped directly to your studio.'}`,
     },
   ];
 
@@ -177,20 +190,21 @@ function generateLocationPages(): LocationPage[] {
 
   for (const cityDef of CITIES) {
     const audience = audienceLabel(cityDef.audienceVariant);
+    const state = cityDef.state || "FL";
     for (const kw of KEYWORDS) {
       const slug = `${cityDef.city.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${kw.slug}`;
       pages.push({
         slug,
         city: cityDef.city,
         county: cityDef.county,
-        state: "FL",
+        state,
         keyword: kw.keyword,
         keywordShort: kw.keywordShort,
         audience,
         neighbors: cityDef.neighbors,
-        bodyParagraph1: kw.p1Template(cityDef.city, cityDef.character, audience),
-        bodyParagraph2: kw.p2Template(cityDef.city, cityDef.neighbors),
-        closingSignal: kw.closingTemplate(cityDef.city, cityDef.neighbors, cityDef.county),
+        bodyParagraph1: kw.p1Template(cityDef.city, cityDef.character, audience, state),
+        bodyParagraph2: kw.p2Template(cityDef.city, cityDef.neighbors, state),
+        closingSignal: kw.closingTemplate(cityDef.city, cityDef.neighbors, cityDef.county, state),
       });
     }
   }
