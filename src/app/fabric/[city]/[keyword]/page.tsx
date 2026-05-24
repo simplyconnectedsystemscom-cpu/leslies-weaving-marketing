@@ -1,16 +1,21 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { LOCATION_PAGES, CITIES } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  // Only build this single page for initial production testing
-  return [
-    { city: 'miami-beach', keyword: 'custom-upholstery-fabric' }
-  ];
+  return LOCATION_PAGES.map((page) => {
+    const citySlug = page.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const keywordSlug = page.slug.substring(citySlug.length + 1);
+    return {
+      city: citySlug,
+      keyword: keywordSlug,
+    };
+  });
 }
 
 // Hero image matching the production site
@@ -26,7 +31,7 @@ export async function generateMetadata({
   const pageData = LOCATION_PAGES.find(p => p.slug === fullSlug);
 
   if (!pageData) {
-    return { title: "Leslie's Weaving Studio" };
+    notFound();
   }
 
   const title = `${pageData.keyword} in ${pageData.city} | Leslie's Weaving Studio`;
@@ -55,16 +60,23 @@ export default async function FabricLandingPage({
   const fullSlug = `${city}-${keyword}`;
   const pageData = LOCATION_PAGES.find(p => p.slug === fullSlug);
 
-  // Fallback rendering if the exact combination isn't found
-  const displayCity = pageData?.city || city.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-  const displayKeyword = pageData?.keyword || keyword.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  if (!pageData) {
+    notFound();
+  }
+
+  const displayCity = pageData.city;
+  const displayKeyword = pageData.keyword;
 
   const visualizerUrl = "https://www.lesliesweavingstudio.com/studio";
 
-  const pageDef = pageData ? CITIES.find(c => c.city.toLowerCase() === pageData.city.toLowerCase()) : null;
-  const neighborCities = pageDef?.neighbors
+  const pageDef = CITIES.find(c => c.city.toLowerCase() === pageData.city.toLowerCase());
+  if (!pageDef) {
+    notFound();
+  }
+
+  const neighborCities = pageDef.neighbors
     .map(name => CITIES.find(c => c.city.toLowerCase() === name.toLowerCase()))
-    .filter((c): c is NonNullable<typeof c> => !!c) || [];
+    .filter((c): c is NonNullable<typeof c> => !!c);
 
   return (
     <div className="w-full flex flex-col">
@@ -125,23 +137,15 @@ export default async function FabricLandingPage({
               </h2>
               <div className="w-12 h-0.5 mb-8" style={{ background: "oklch(0.52 0.13 35)" }} />
 
-              {pageData ? (
-                <>
-                  <p className="text-lg leading-relaxed mb-6" style={{ color: "oklch(0.35 0.02 58)" }}>
-                    {pageData.bodyParagraph1}
-                  </p>
-                  <p className="text-lg leading-relaxed mb-8" style={{ color: "oklch(0.35 0.02 58)" }}>
-                    {pageData.bodyParagraph2}
-                  </p>
-                  <p className="text-base leading-relaxed italic" style={{ color: "oklch(0.52 0.13 35)" }}>
-                    {pageData.closingSignal}
-                  </p>
-                </>
-              ) : (
-                <p className="text-lg leading-relaxed" style={{ color: "oklch(0.35 0.02 58)" }}>
-                  We weave custom {displayKeyword.toLowerCase()} for discerning designers in {displayCity}. Use our interactive 3D studio below to begin visualizing your bespoke commission.
-                </p>
-              )}
+              <p className="text-lg leading-relaxed mb-6" style={{ color: "oklch(0.35 0.02 58)" }}>
+                {pageData.bodyParagraph1}
+              </p>
+              <p className="text-lg leading-relaxed mb-8" style={{ color: "oklch(0.35 0.02 58)" }}>
+                {pageData.bodyParagraph2}
+              </p>
+              <p className="text-base leading-relaxed italic" style={{ color: "oklch(0.52 0.13 35)" }}>
+                {pageData.closingSignal}
+              </p>
 
               {/* Related Service Areas */}
               {neighborCities.length > 0 && (
