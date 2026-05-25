@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LOCATION_PAGES, LocationPage } from "@/data/locations";
+import { CITIES, KEYWORDS } from "@/data/locations";
 
 export const dynamic = "force-static";
 
@@ -9,24 +9,22 @@ export const metadata = {
 };
 
 export default function LocationsDirectoryPage() {
-  // Group LOCATION_PAGES by County, and then by City.
-  const counties: { [county: string]: { [city: string]: LocationPage[] } } = {};
+  // Group CITIES by County
+  const counties: { [county: string]: typeof CITIES } = {};
   
-  for (const page of LOCATION_PAGES) {
-    const countyName = page.county || "South Florida";
-    const cityName = page.city;
-    
+  for (const city of CITIES) {
+    const countyName = city.county || "South Florida";
     if (!counties[countyName]) {
-      counties[countyName] = {};
+      counties[countyName] = [];
     }
-    if (!counties[countyName][cityName]) {
-      counties[countyName][cityName] = [];
-    }
-    counties[countyName][cityName].push(page);
+    counties[countyName].push(city);
   }
   
   // Sort counties for consistency
   const sortedCounties = Object.keys(counties).sort();
+  
+  // Display only the first 5 keywords per city to prevent DOM bloat while keeping links crawlable
+  const visibleKeywords = KEYWORDS.slice(0, 5);
   
   return (
     <div className="min-h-screen bg-[#111111] text-white font-sans py-16 px-4 md:px-8">
@@ -46,7 +44,7 @@ export default function LocationsDirectoryPage() {
         <div className="space-y-16">
           {sortedCounties.map((countyName) => {
             const cities = counties[countyName];
-            const sortedCities = Object.keys(cities).sort();
+            const sortedCities = [...cities].sort((a, b) => a.city.localeCompare(b.city));
             
             return (
               <section key={countyName} className="space-y-8">
@@ -57,8 +55,9 @@ export default function LocationsDirectoryPage() {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {sortedCities.map((cityName) => {
-                    const pages = cities[cityName];
+                  {sortedCities.map((city) => {
+                    const cityName = city.city;
+                    const citySlug = cityName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
                     
                     return (
                       <div 
@@ -71,25 +70,24 @@ export default function LocationsDirectoryPage() {
                           </h3>
                           
                           <ul className="space-y-4">
-                            {pages.map((page) => {
-                              const citySlug = page.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-                              const keywordSlug = page.slug.substring(citySlug.length + 1);
+                            {visibleKeywords.map((kw) => {
+                              const pageSlug = `${citySlug}-${kw.slug}`;
                               
                               return (
-                                <li key={page.slug} className="text-sm border-l-2 border-[#d4af37]/30 pl-3">
+                                <li key={kw.slug} className="text-sm border-l-2 border-[#d4af37]/30 pl-3">
                                   <div className="font-semibold text-white/90">
-                                    {page.keyword}
+                                    {kw.keyword}
                                   </div>
                                   <div className="flex gap-4 mt-1 text-xs">
                                     <Link 
-                                      href={`/locations/${page.slug}`}
+                                      href={`/locations/${pageSlug}`}
                                       className="text-[#d4af37] hover:underline"
                                     >
                                       Location Page
                                     </Link>
                                     <span className="text-white/20">|</span>
                                     <Link 
-                                      href={`/fabric/${citySlug}/${keywordSlug}`}
+                                      href={`/fabric/${citySlug}/${kw.slug}`}
                                       className="text-white/60 hover:text-white hover:underline"
                                     >
                                       Fabric Spec

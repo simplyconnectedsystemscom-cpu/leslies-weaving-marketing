@@ -87,8 +87,7 @@ export const CITIES: Array<{
 
 // ─── Keyword clusters ────────────────────────────────────────────────────────
 
-// ─── Keyword clusters ────────────────────────────────────────────────────────
-const KEYWORDS: Array<{
+export const KEYWORDS: Array<{
   keyword: string;
   keywordShort: string;
   slug: string;
@@ -4059,39 +4058,42 @@ const KEYWORDS: Array<{
 ];
 
 // ─── Audience label helper ───────────────────────────────────────────────────
-function audienceLabel(variant: string): string {
+export function audienceLabel(variant: string): string {
   if (variant === "fashion") return "Fashion Designers";
   if (variant === "judaica") return "Judaica & Ceremonial Designers";
   return "Interior Designers";
 }
 
-// ─── Generate all location pages ─────────────────────────────────────────────
-function generateLocationPages(): LocationPage[] {
-  const pages: LocationPage[] = [];
-
-  for (const cityDef of CITIES) {
-    const audience = audienceLabel(cityDef.audienceVariant);
-    const state = cityDef.state || "FL";
-    for (const kw of KEYWORDS) {
-      const slug = `${cityDef.city.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${kw.slug}`;
-      pages.push({
-        slug,
-        city: cityDef.city,
-        county: cityDef.county,
-        state,
-        keyword: kw.keyword,
-        keywordShort: kw.keywordShort,
-        audience,
-        neighbors: cityDef.neighbors || [],
-        bodyParagraph1: kw.p1Template(cityDef.city, cityDef.character, audience, state),
-        bodyParagraph2: kw.p2Template(cityDef.city, cityDef.neighbors || [], state),
-        closingSignal: kw.closingTemplate(cityDef.city, cityDef.neighbors || [], cityDef.county, state),
-      });
+// ─── Resolve single page dynamically on-demand ────────────────────────────────
+export function getLocationPageBySlug(slug: string): LocationPage | null {
+  // Sort by city name length descending so the longest city names match first
+  const sortedCities = [...CITIES].sort((a, b) => b.city.length - a.city.length);
+  
+  for (const cityDef of sortedCities) {
+    const citySlug = cityDef.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    if (slug.startsWith(citySlug + "-")) {
+      const kwSlug = slug.substring(citySlug.length + 1);
+      const kw = KEYWORDS.find(k => k.slug === kwSlug);
+      if (kw) {
+        const audience = audienceLabel(cityDef.audienceVariant);
+        const state = cityDef.state || "FL";
+        return {
+          slug,
+          city: cityDef.city,
+          county: cityDef.county,
+          state,
+          keyword: kw.keyword,
+          keywordShort: kw.keywordShort,
+          audience,
+          neighbors: cityDef.neighbors || [],
+          bodyParagraph1: kw.p1Template(cityDef.city, cityDef.character, audience, state),
+          bodyParagraph2: kw.p2Template(cityDef.city, cityDef.neighbors || [], state),
+          closingSignal: kw.closingTemplate(cityDef.city, cityDef.neighbors || [], cityDef.county, state),
+        };
+      }
     }
   }
-
-  return pages;
+  return null;
 }
 
-export const LOCATION_PAGES: LocationPage[] = generateLocationPages();
-export const TOTAL_LOCATION_PAGES = LOCATION_PAGES.length;
+export const TOTAL_LOCATION_PAGES = CITIES.length * KEYWORDS.length;

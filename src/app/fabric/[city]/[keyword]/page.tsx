@@ -1,21 +1,28 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LOCATION_PAGES, CITIES } from "@/data/locations";
+import { CITIES, KEYWORDS, getLocationPageBySlug } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return LOCATION_PAGES.slice(0, 300).map((page) => {
-    const citySlug = page.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const keywordSlug = page.slug.substring(citySlug.length + 1);
-    return {
-      city: citySlug,
-      keyword: keywordSlug,
-    };
-  });
+  // Generate first 300 combinations statically
+  const params = [];
+  let count = 0;
+  for (const cityDef of CITIES) {
+    const citySlug = cityDef.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    for (const kw of KEYWORDS) {
+      params.push({
+        city: citySlug,
+        keyword: kw.slug,
+      });
+      count++;
+      if (count === 300) return params;
+    }
+  }
+  return params;
 }
 
 // Hero image matching the production site
@@ -28,7 +35,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city, keyword } = await params;
   const fullSlug = `${city}-${keyword}`;
-  const pageData = LOCATION_PAGES.find(p => p.slug === fullSlug);
+  const pageData = getLocationPageBySlug(fullSlug);
 
   if (!pageData) {
     notFound();
@@ -58,7 +65,7 @@ export default async function FabricLandingPage({
 }) {
   const { city, keyword } = await params;
   const fullSlug = `${city}-${keyword}`;
-  const pageData = LOCATION_PAGES.find(p => p.slug === fullSlug);
+  const pageData = getLocationPageBySlug(fullSlug);
 
   if (!pageData) {
     notFound();
