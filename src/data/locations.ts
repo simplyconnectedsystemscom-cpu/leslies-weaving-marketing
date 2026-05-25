@@ -86,7 +86,6 @@ export const CITIES: Array<{
 // ─── Keyword clusters ────────────────────────────────────────────────────────
 
 // ─── Keyword clusters ────────────────────────────────────────────────────────
-
 export const KEYWORDS: Array<{
   keyword: string;
   keywordShort: string;
@@ -301,17 +300,6 @@ export const KEYWORDS: Array<{
       `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings cloth that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
     p2Template: (city, neighbors, state) =>
       `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings cloth at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
-    keyword: "Custom Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "custom-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
     closingTemplate: (city, neighbors, county, state) =>
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
@@ -701,17 +689,6 @@ export const KEYWORDS: Array<{
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
   {
-    keyword: "Bespoke Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "bespoke-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
     keyword: "Bespoke Furniture Fabric",
     keywordShort: "furniture fabric",
     slug: "bespoke-furniture-fabric",
@@ -1093,17 +1070,6 @@ export const KEYWORDS: Array<{
       `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings cloth that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
     p2Template: (city, neighbors, state) =>
       `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings cloth at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
-    keyword: "Tailored Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "tailored-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
     closingTemplate: (city, neighbors, county, state) =>
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
@@ -1493,17 +1459,6 @@ export const KEYWORDS: Array<{
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
   {
-    keyword: "Handwoven Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "handwoven-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
     keyword: "Handwoven Furniture Fabric",
     keywordShort: "furniture fabric",
     slug: "handwoven-furniture-fabric",
@@ -1885,17 +1840,6 @@ export const KEYWORDS: Array<{
       `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings cloth that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
     p2Template: (city, neighbors, state) =>
       `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings cloth at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
-    keyword: "Handmade Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "handmade-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
     closingTemplate: (city, neighbors, county, state) =>
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
@@ -2285,17 +2229,6 @@ export const KEYWORDS: Array<{
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
   {
-    keyword: "Handcrafted Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "handcrafted-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
     keyword: "Handcrafted Furniture Fabric",
     keywordShort: "furniture fabric",
     slug: "handcrafted-furniture-fabric",
@@ -2677,17 +2610,6 @@ export const KEYWORDS: Array<{
       `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings cloth that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
     p2Template: (city, neighbors, state) =>
       `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings cloth at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
-    keyword: "Commissioned Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "commissioned-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
     closingTemplate: (city, neighbors, county, state) =>
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
@@ -3077,17 +2999,6 @@ export const KEYWORDS: Array<{
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
   {
-    keyword: "Made-to-order Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "made-to-order-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
     keyword: "Made-to-order Furniture Fabric",
     keywordShort: "furniture fabric",
     slug: "made-to-order-furniture-fabric",
@@ -3473,17 +3384,6 @@ export const KEYWORDS: Array<{
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
   {
-    keyword: "Luxury Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "luxury-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
     keyword: "Luxury Furniture Fabric",
     keywordShort: "furniture fabric",
     slug: "luxury-furniture-fabric",
@@ -3865,17 +3765,6 @@ export const KEYWORDS: Array<{
       `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings cloth that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
     p2Template: (city, neighbors, state) =>
       `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings cloth at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
-    closingTemplate: (city, neighbors, county, state) =>
-      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
-  },
-  {
-    keyword: "Artisan Wall Coverings Coverings",
-    keywordShort: "wall coverings coverings",
-    slug: "artisan-wall-coverings-coverings",
-    p1Template: (city, character, audience, state) =>
-      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for wall coverings coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
-    p2Template: (city, neighbors, state) =>
-      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton wall coverings coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
     closingTemplate: (city, neighbors, county, state) =>
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   },
