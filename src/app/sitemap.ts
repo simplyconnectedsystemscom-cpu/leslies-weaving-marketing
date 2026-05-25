@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { Client } from "pg";
+import { CITIES } from "@/data/locations";
 
 export const dynamic = "force-static";
 export const revalidate = 3600; // Cache/revalidate every hour
@@ -40,6 +41,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
   ];
+
+  // Add all city index pages to sitemap
+  for (const city of CITIES) {
+    const citySlug = city.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    entries.push({
+      url: `${baseUrl}/locations/by-city/${citySlug}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    });
+  }
 
   // Fetch all location-based pages from PostgreSQL database
   const client = new Client({

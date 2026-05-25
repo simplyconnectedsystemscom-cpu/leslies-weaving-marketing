@@ -98,6 +98,16 @@ export default function LocationsDirectoryPage() {
                             })}
                           </ul>
                         </div>
+
+                        <div className="mt-6 pt-4 border-t border-white/5">
+                          <Link 
+                            href={`/locations/by-city/${citySlug}`}
+                            className="text-sm font-semibold text-[#d4af37] hover:underline flex items-center gap-1"
+                          >
+                            <span>Explore all {KEYWORDS.length * 2} configurations</span>
+                            <span>&rarr;</span>
+                          </Link>
+                        </div>
                       </div>
                     );
                   })}
