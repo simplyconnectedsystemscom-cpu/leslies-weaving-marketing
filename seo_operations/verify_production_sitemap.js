@@ -37,7 +37,7 @@ https.get(url, (res) => {
         console.log(`First 5 URLs:`, urls.slice(0, 5));
         console.log(`Last 5 URLs:`, urls.slice(-5));
         
-        if (urls.length === 36005 && uniqueUrls.size === 36005) {
+        if (urls.length === 35005 && uniqueUrls.size === 35005) {
             console.log('[SUCCESS] Production sitemap is 100% correct!');
         } else {
             console.warn('[WARNING] Production sitemap length or uniqueness mismatch!');
