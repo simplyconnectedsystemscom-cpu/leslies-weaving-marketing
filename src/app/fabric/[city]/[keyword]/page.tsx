@@ -5,10 +5,10 @@ import { LOCATION_PAGES, CITIES } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return LOCATION_PAGES.map((page) => {
+  return LOCATION_PAGES.slice(0, 300).map((page) => {
     const citySlug = page.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const keywordSlug = page.slug.substring(citySlug.length + 1);
     return {

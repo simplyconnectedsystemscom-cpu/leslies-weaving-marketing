@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
-import { LOCATION_PAGES } from "@/data/locations";
-
+import { Client } from "pg";
 
 export const dynamic = "force-static";
+export const revalidate = 3600; // Cache/revalidate every hour
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const baseUrl = "https://www.lesliesweavingstudio.com";
   
@@ -41,29 +41,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Add Local Pages (240)
-  for (const page of LOCATION_PAGES) {
-    const citySlug = page.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const keywordSlug = page.slug.substring(citySlug.length + 1);
+  // Fetch all location-based pages from PostgreSQL database
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+  });
+  
+  await client.connect();
+  const res = await client.query(
+    "SELECT url, updated_at FROM page_indexing WHERE slug_category IN ('location', 'fabric') ORDER BY id ASC"
+  );
+  await client.end();
 
-    // /locations/[slug]
+  for (const row of res.rows) {
     entries.push({
-      url: `${baseUrl}/locations/${page.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    });
-    
-    // /fabric/[city]/[keyword]
-    entries.push({
-      url: `${baseUrl}/fabric/${citySlug}/${keywordSlug}`,
-      lastModified: now,
+      url: row.url,
+      lastModified: row.updated_at ? new Date(row.updated_at) : now,
       changeFrequency: "monthly",
       priority: 0.8,
     });
   }
-
-
 
   return entries;
 }
