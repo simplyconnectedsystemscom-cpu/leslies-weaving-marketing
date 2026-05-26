@@ -15,8 +15,23 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.lesliesweavingstudio.com"),
   title: "Leslie's Weaving Studio",
   description: "Fabric no one else can make. Bespoke 100% cotton fabric for interior designers and fashion houses.",
+  openGraph: {
+    title: "Leslie's Weaving Studio",
+    description: "Fabric no one else can make. Bespoke 100% cotton fabric for interior designers and fashion houses.",
+    url: "https://www.lesliesweavingstudio.com",
+    siteName: "Leslie's Weaving Studio",
+    type: "website",
+    images: [{ url: "https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Leslie's Weaving Studio",
+    description: "Fabric no one else can make. Bespoke 100% cotton fabric for interior designers and fashion houses.",
+    images: ["https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg"],
+  },
 };
 
 export default function LesliesWeavingLayout({

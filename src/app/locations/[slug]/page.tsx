@@ -25,6 +25,23 @@ export async function generateStaticParams() {
 // Hero image matching the production site
 const IMG_HERO_LOOM = "https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg";
 
+function getShortTitle(keyword: string, city: string): string {
+  const full = `${keyword} in ${city} | Leslie's Weaving Studio`;
+  if (full.length <= 60) return full;
+  
+  const shortBrand = `${keyword} in ${city} | Leslie's Weaving`;
+  if (shortBrand.length <= 60) return shortBrand;
+  
+  let cleanKw = keyword.startsWith("Custom ") ? keyword.substring(7) : keyword;
+  const noCustomBrand = `${cleanKw} in ${city} | Leslie's Weaving`;
+  if (noCustomBrand.length <= 60) return noCustomBrand;
+  
+  const minimalBrand = `${cleanKw} in ${city} | Leslie's`;
+  if (minimalBrand.length <= 60) return minimalBrand;
+
+  return minimalBrand.slice(0, 60);
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -37,8 +54,8 @@ export async function generateMetadata({
     notFound();
   }
 
-  const title = `${pageData.keyword} in ${pageData.city} | Leslie's Weaving Studio`;
-  const description = `Discover bespoke 100% cotton ${pageData.keywordShort.toLowerCase()} in ${pageData.city}. 72" wide, hand woven, with over 70 colors.`;
+  const title = getShortTitle(pageData.keyword, pageData.city);
+  const description = `Discover bespoke 100% cotton ${pageData.keywordShort.toLowerCase()} in ${pageData.city}. Woven on our 72" Dobby loom with over 70 colors available for designers.`;
 
   return {
     title,
@@ -49,7 +66,15 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
+      url: `https://www.lesliesweavingstudio.com/locations/${slug}`,
       type: "website",
+      images: [{ url: IMG_HERO_LOOM }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [IMG_HERO_LOOM],
     },
   };
 }

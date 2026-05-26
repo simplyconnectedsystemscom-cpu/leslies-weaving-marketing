@@ -25,14 +25,28 @@ export async function generateMetadata({
     notFound();
   }
 
-  const title = `Bespoke Fabric Specifications in ${cityDef.city} | Leslie's Weaving Studio`;
-  const description = `Browse all bespoke 100% cotton fabric and weaving specifications for ${cityDef.city}, Florida. Handcrafted by Leslie's Weaving Studio.`;
+  const state = cityDef.state || "FL";
+  const title = `Fabric Specs in ${cityDef.city} | Leslie's Weaving`;
+  const description = `Browse bespoke 100% cotton fabric and weaving specifications for ${cityDef.city}, ${state === "FL" ? "Florida" : state}. Woven on our 72" Dobby loom.`;
 
   return {
     title,
     description,
     alternates: {
       canonical: `https://www.lesliesweavingstudio.com/locations/by-city/${city}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://www.lesliesweavingstudio.com/locations/by-city/${city}`,
+      type: "website",
+      images: [{ url: "https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg"],
     },
   };
 }

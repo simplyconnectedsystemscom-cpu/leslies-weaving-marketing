@@ -6,6 +6,20 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Studio Locations Directory | Leslie's Weaving",
   description: "Browse our South Florida service locations and bespoke fabric specifications. Seam-free 100% cotton handwoven fabric.",
+  openGraph: {
+    title: "Studio Locations Directory | Leslie's Weaving",
+    description: "Browse our South Florida service locations and bespoke fabric specifications. Seam-free 100% cotton handwoven fabric.",
+    url: "https://www.lesliesweavingstudio.com/locations",
+    siteName: "Leslie's Weaving Studio",
+    type: "website",
+    images: [{ url: "https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Studio Locations Directory | Leslie's Weaving",
+    description: "Browse our South Florida service locations and bespoke fabric specifications. Seam-free 100% cotton handwoven fabric.",
+    images: ["https://d2xsxph8kpxj0f.cloudfront.net/310419663032508805/VPKxLBejXfnETyfxXYi5Qj/loom-front_5f9c7f9f.jpg"],
+  },
 };
 
 export default function LocationsDirectoryPage() {
