@@ -4,7 +4,7 @@ const fs = require('fs');
 const { Client } = require('pg');
 
 // Paths to the OAuth2 credentials files in the SimplyMobility root folder
-const SECRETS_PATH = path.join(__dirname, '..', '..', 'client_secrets.json');
+const SECRETS_PATH = path.join(__dirname, '..', '..', 'leslies_client_secrets.json');
 const TOKEN_PATH = path.join(__dirname, '..', '..', 'leslies_oauth_tokens.json');
 
 // We want exactly 66 URLs per group to hit ~198 total per day
@@ -86,10 +86,14 @@ async function main() {
 
         const credentials = JSON.parse(fs.readFileSync(SECRETS_PATH));
         const tokens = JSON.parse(fs.readFileSync(TOKEN_PATH));
+        const config = credentials.installed || credentials.web;
+        if (!config) {
+            throw new Error("Invalid client_secrets.json structure: must contain 'installed' or 'web' object.");
+        }
 
         const oauth2Client = new google.auth.OAuth2(
-            credentials.installed.client_id,
-            credentials.installed.client_secret,
+            config.client_id,
+            config.client_secret,
             'http://localhost:8765/oauth2callback'
         );
 
@@ -102,7 +106,7 @@ async function main() {
             const updated = { ...currentTokens, ...newTokens };
             fs.writeFileSync(TOKEN_PATH, JSON.stringify(updated, null, 2));
         });
-        
+
         let successCount = 0;
         let failCount = 0;
 

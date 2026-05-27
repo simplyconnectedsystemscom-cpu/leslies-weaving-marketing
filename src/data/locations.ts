@@ -86,6 +86,10 @@ export const CITIES: Array<{
 // ─── Keyword clusters ────────────────────────────────────────────────────────
 
 // ─── Keyword clusters ────────────────────────────────────────────────────────
+
+// ─── Keyword clusters ────────────────────────────────────────────────────────
+
+// ─── Keyword clusters ────────────────────────────────────────────────────────
 export const KEYWORDS: Array<{
   keyword: string;
   keywordShort: string;
@@ -3941,6 +3945,83 @@ export const KEYWORDS: Array<{
       `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for tapestry coverings that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
     p2Template: (city, neighbors, state) =>
       `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton tapestry coverings at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Custom Textile Studio",
+    keywordShort: "textile studio",
+    slug: "custom-textile-studio",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for textile studio that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton textile studio at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Handwoven Fabric Interior Designers",
+    keywordShort: "fabric interior designers",
+    slug: "handwoven-fabric-interior-designers",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for fabric interior designers that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton fabric interior designers at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Custom Woven Fabric",
+    keywordShort: "woven fabric",
+    slug: "custom-woven-fabric",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for woven fabric that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton woven fabric at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Luxury Fabric Interior Design",
+    keywordShort: "fabric interior design",
+    slug: "luxury-fabric-interior-design",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for fabric interior design that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton fabric interior design at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Personalized Sofa Upholstery",
+    keywordShort: "sofa upholstery",
+    slug: "personalized-sofa-upholstery",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for sofa upholstery that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton sofa upholstery at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Hospitality & Hotel Fabric",
+    keywordShort: "& hotel fabric",
+    slug: "hospitality-hotel-fabric",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for & hotel fabric that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton & hotel fabric at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
+    closingTemplate: (city, neighbors, county, state) =>
+      `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
+  },
+  {
+    keyword: "Trade-Only Interior Design Yardage",
+    keywordShort: "interior design yardage",
+    slug: "trade-only-interior-design-yardage",
+    p1Template: (city, character, audience, state) =>
+      `${audience} in ${city} work with some of the most discerning clients in ${state === 'FL' ? 'South Florida' : 'the region'} — clients whose homes reflect ${character}. When a project calls for interior design yardage that no showroom carries, woven to a client's exact specification in a colorway that belongs to their home alone, Leslie's Weaving is the only studio within a thousand miles that can deliver it.`,
+    p2Template: (city, neighbors, state) =>
+      `Our 72-inch computerized Dobby loom in Coral Springs weaves 100% North American cotton interior design yardage at 24-shaft complexity — intricate, exclusive patterns that mass-market suppliers cannot replicate. Every yard is woven by hand, inspected by hand, and shipped directly to your studio or your client's address in ${city}${neighbors.length ? ', ' + neighbors[0] : ''}, or anywhere in ${state === 'FL' ? 'South Florida' : 'the state'}.`,
     closingTemplate: (city, neighbors, county, state) =>
       `Serving ${city}${neighbors.length ? ', ' + neighbors.join(", ") : ""}, and the broader ${county} design community. ${state === 'FL' ? 'We bring the sample book to you.' : 'Consultations available online and samples shipped directly.'}`
   }

@@ -2,7 +2,7 @@ const { google } = require('googleapis');
 const path = require('path');
 const fs = require('fs');
 
-const SECRETS_PATH = path.join(__dirname, '../../client_secrets.json');
+const SECRETS_PATH = path.join(__dirname, '../../leslies_client_secrets.json');
 const TOKEN_PATH = path.join(__dirname, '../../leslies_oauth_tokens.json');
 
 async function main() {
@@ -15,13 +15,18 @@ async function main() {
     const credentials = JSON.parse(fs.readFileSync(SECRETS_PATH));
     const tokens = JSON.parse(fs.readFileSync(TOKEN_PATH));
     
-    // We try using http://localhost first as defined in client_secrets.json
-    const redirectUri = credentials.installed.redirect_uris[0] || 'http://localhost';
+    const config = credentials.installed || credentials.web;
+    if (!config) {
+        console.error("Invalid client secrets format");
+        process.exit(1);
+    }
+    
+    const redirectUri = (config.redirect_uris && config.redirect_uris[0]) || 'http://localhost:8765/oauth2callback';
     console.log("Using redirect URI:", redirectUri);
     
     const oauth2Client = new google.auth.OAuth2(
-        credentials.installed.client_id,
-        credentials.installed.client_secret,
+        config.client_id,
+        config.client_secret,
         redirectUri
     );
     

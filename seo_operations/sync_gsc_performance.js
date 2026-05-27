@@ -4,7 +4,7 @@ const fs = require('fs');
 const { Client } = require('pg');
 
 // Paths to the OAuth2 credentials files in the SimplyMobility root folder
-const SECRETS_PATH = path.join(__dirname, '..', '..', 'client_secrets.json');
+const SECRETS_PATH = path.join(__dirname, '..', '..', 'leslies_client_secrets.json');
 const TOKEN_PATH = path.join(__dirname, '..', '..', 'leslies_oauth_tokens.json');
 
 function getDatabaseUrl() {
