@@ -23,6 +23,10 @@ function getDatabaseUrl() {
 }
 
 async function syncSitemap() {
+    if (process.env.SEO_SYNC_AUTHORIZED !== 'true') {
+        console.error("CRITICAL: Unauthorized execution attempt. Please set SEO_SYNC_AUTHORIZED=true to run this script.");
+        process.exit(1);
+    }
     console.log(`Fetching sitemap from ${SITEMAP_URL}...`);
     
     try {

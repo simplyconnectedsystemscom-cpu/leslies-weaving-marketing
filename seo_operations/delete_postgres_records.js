@@ -3,6 +3,10 @@ const { Client } = require('pg');
 const POSTGRES_CONN_STRING = "postgresql://neondb_owner:npg_P7TvY0rpwLcR@ep-plain-flower-an7t5aj5-pooler.c-6.us-east-1.aws.neon.tech/leslies_seo_db?channel_binding=require&sslmode=require";
 
 async function main() {
+    if (process.env.SEO_SYNC_AUTHORIZED !== 'true') {
+        console.error("CRITICAL: Unauthorized execution attempt. Please set SEO_SYNC_AUTHORIZED=true to run this script.");
+        process.exit(1);
+    }
     console.log("Connecting to PostgreSQL...");
     const pgClient = new Client({ connectionString: POSTGRES_CONN_STRING });
     await pgClient.connect();

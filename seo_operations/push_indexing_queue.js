@@ -52,6 +52,10 @@ async function updateUrlStatus(client, url, status, errorMessage = null) {
 }
 
 async function main() {
+    if (process.env.SEO_SYNC_AUTHORIZED !== 'true') {
+        console.error("CRITICAL: Unauthorized execution attempt. Please set SEO_SYNC_AUTHORIZED=true to run this script.");
+        process.exit(1);
+    }
     const connStr = getDatabaseUrl();
     if (!connStr) {
         console.error("Error: DATABASE_URL not found.");

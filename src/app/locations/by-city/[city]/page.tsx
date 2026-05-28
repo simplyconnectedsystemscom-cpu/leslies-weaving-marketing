@@ -79,16 +79,24 @@ export default async function CityDirectoryPage({
     { name: "Soft Goods", keywords: [] as typeof KEYWORDS },
     { name: "Bedding", keywords: [] as typeof KEYWORDS },
     { name: "Tapestry", keywords: [] as typeof KEYWORDS },
+    { name: "Interior Design Fabrics", keywords: [] as typeof KEYWORDS },
   ];
 
   // Group keywords
   for (const kw of KEYWORDS) {
     let matched = false;
     for (const cat of categories) {
+      if (cat.name === "Interior Design Fabrics") continue;
       if (kw.keyword.includes(cat.name)) {
         cat.keywords.push(kw);
         matched = true;
         break;
+      }
+    }
+    if (!matched) {
+      const designCat = categories.find(c => c.name === "Interior Design Fabrics");
+      if (designCat) {
+        designCat.keywords.push(kw);
       }
     }
   }
@@ -121,7 +129,7 @@ export default async function CityDirectoryPage({
         </header>
 
         <div className="space-y-16">
-          {categories.map((category) => (
+          {categories.filter(c => c.keywords.length > 0).map((category) => (
             <section key={category.name} className="space-y-6">
               <div className="border-b border-white/10 pb-3 flex justify-between items-baseline">
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#d4af37]">

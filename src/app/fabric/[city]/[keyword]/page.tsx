@@ -3,6 +3,40 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CITIES, KEYWORDS, getLocationPageBySlug } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
+import seoOptimizations from "../../../../../seo_operations/seo-optimizations.json";
+
+function SemanticParagraphs({ paragraphs }: { paragraphs: string[] }) {
+  if (!paragraphs || paragraphs.length === 0) return null;
+  return (
+    <section className="py-16" style={{ background: "oklch(0.95 0.008 75)", borderTop: "1px solid oklch(0.87 0.015 65)" }}>
+      <div className="container max-w-[1600px] mx-auto px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="font-display text-2xl font-bold mb-6" style={{ color: "oklch(0.22 0.025 55)" }}>Additional Insights & Standards</h2>
+          {paragraphs.map((para: string, idx: number) => {
+            if (para.startsWith('*') || para.startsWith('-')) {
+              return (
+                <ul key={idx} className="list-disc pl-6 space-y-2 mb-6" style={{ color: "oklch(0.35 0.02 58)" }}>
+                  {para.split('\n').map((line: string, lIdx: number) => {
+                    const cleanLine = line.replace(/^[\s*-]+/, '').trim();
+                    if (!cleanLine) return null;
+                    return <li key={lIdx}>{cleanLine}</li>;
+                  })}
+                </ul>
+              );
+            }
+            return (
+              <p key={idx} className="text-lg leading-relaxed mb-6 last:mb-0" style={{ color: "oklch(0.35 0.02 58)" }}>
+                {para.split('**').map((part: string, pIdx: number) => 
+                  pIdx % 2 === 1 ? <strong key={pIdx} className="font-semibold" style={{ color: "oklch(0.22 0.025 55)" }}>{part}</strong> : part
+                )}
+              </p>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
 export const dynamicParams = true;
@@ -58,6 +92,32 @@ export async function generateMetadata({
     notFound();
   }
 
+  const path = `/fabric/${city}/${keyword}`;
+  const optimization = (seoOptimizations as any)[path];
+
+  if (optimization) {
+    return {
+      title: optimization.title,
+      description: optimization.metaDescription,
+      alternates: {
+        canonical: `https://www.lesliesweavingstudio.com${path}`,
+      },
+      openGraph: {
+        title: optimization.title,
+        description: optimization.metaDescription,
+        url: `https://www.lesliesweavingstudio.com${path}`,
+        type: "website",
+        images: [{ url: IMG_HERO_LOOM }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: optimization.title,
+        description: optimization.metaDescription,
+        images: [IMG_HERO_LOOM],
+      },
+    };
+  }
+
   const title = getShortTitle(pageData.keyword, pageData.city);
   const description = `Discover bespoke 100% cotton ${pageData.keywordShort.toLowerCase()} in ${pageData.city}. Woven on our 72" Dobby loom with over 70 colors available for designers.`;
 
@@ -96,6 +156,9 @@ export default async function FabricLandingPage({
     notFound();
   }
 
+  const path = `/fabric/${city}/${keyword}`;
+  const optimization = (seoOptimizations as any)[path];
+
   const displayCity = pageData.city;
   const displayKeyword = pageData.keyword;
 
@@ -109,6 +172,8 @@ export default async function FabricLandingPage({
   const neighborCities = pageDef.neighbors
     .map(name => CITIES.find(c => c.city.toLowerCase() === name.toLowerCase()))
     .filter((c): c is NonNullable<typeof c> => !!c);
+
+  const displayH1 = optimization?.h1 || `Looking for ${displayKeyword.toLowerCase()} in ${displayCity}?`;
 
   return (
     <div className="w-full flex flex-col">
@@ -126,7 +191,7 @@ export default async function FabricLandingPage({
               {displayCity} &middot; Est. 2012 &middot; American Made &middot; 100% Cotton
             </p>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold italic leading-tight mb-6 drop-shadow-lg" style={{ color: "white", textShadow: "0 4px 32px rgba(0,0,0,0.5)" }}>
-              Looking for {displayKeyword.toLowerCase()} in {displayCity}?
+              {displayH1}
             </h1>
             <p className="text-lg md:text-xl leading-relaxed drop-shadow-md" style={{ color: "oklch(0.95 0.01 75)" }}>
               See what Leslie's Weaving Studio can do for your project. We weave bespoke 100% cotton fabric on a 72-inch computerized Dobby loom — available nowhere else in the Southeast.
@@ -247,6 +312,10 @@ export default async function FabricLandingPage({
           </div>
         </div>
       </section>
+
+      {optimization?.semanticParagraphs && (
+        <SemanticParagraphs paragraphs={optimization.semanticParagraphs} />
+      )}
 
       {/* ── 4. A Call to Action (Dedicated Form) ───────────────────────────── */}
       <section className="py-24" style={{ background: "oklch(0.16 0.02 55)", borderTop: "1px solid oklch(0.87 0.015 65)" }}>

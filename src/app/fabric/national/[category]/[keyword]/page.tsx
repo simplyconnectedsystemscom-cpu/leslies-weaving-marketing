@@ -39,7 +39,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ category: string; keyword: string }>;
 }): Promise<Metadata> {
-  const { keyword } = await params;
+  const { category, keyword } = await params;
   const kw = KEYWORDS.find(k => k.slug === keyword);
 
   if (!kw) {
@@ -53,12 +53,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `https://www.lesliesweavingstudio.com/fabric/national/${keyword}`,
+      canonical: `https://www.lesliesweavingstudio.com/fabric/national/${category}/${keyword}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://www.lesliesweavingstudio.com/fabric/national/${keyword}`,
+      url: `https://www.lesliesweavingstudio.com/fabric/national/${category}/${keyword}`,
       type: "website",
       images: [{ url: IMG_HERO_LOOM }],
     },
