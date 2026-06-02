@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { Client } from "pg";
 import { CITIES } from "@/data/locations";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 export const revalidate = 3600; // Cache/revalidate every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

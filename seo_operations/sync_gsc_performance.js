@@ -45,9 +45,14 @@ async function syncPerformance() {
         const credentials = JSON.parse(fs.readFileSync(SECRETS_PATH));
         const tokens = JSON.parse(fs.readFileSync(TOKEN_PATH));
 
+        const config = credentials.installed || credentials.web;
+        if (!config) {
+            throw new Error("Invalid client_secrets.json structure: must contain 'installed' or 'web' object.");
+        }
+
         const oauth2Client = new google.auth.OAuth2(
-            credentials.installed.client_id,
-            credentials.installed.client_secret,
+            config.client_id,
+            config.client_secret,
             'http://localhost:8765/oauth2callback'
         );
 
@@ -66,7 +71,7 @@ async function syncPerformance() {
         const endDate = new Date().toISOString().split('T')[0];
         const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        const siteUrl = 'sc-domain:lesliesweavingstudio.com';
+        const siteUrl = 'https://www.lesliesweavingstudio.com/';
 
         console.log(`Querying Google Search Console for ${siteUrl} (${startDate} to ${endDate})...`);
 
