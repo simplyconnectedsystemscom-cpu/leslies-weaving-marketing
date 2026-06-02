@@ -31,6 +31,7 @@ function getDatabaseUrl() {
 }
 
 async function getBatchFromDB(client, group, limit) {
+    if (limit <= 0) return [];
     const query = `
         SELECT url FROM page_indexing
         WHERE ab_group = $1 
@@ -40,6 +41,17 @@ async function getBatchFromDB(client, group, limit) {
     `;
     const res = await client.query(query, [group, limit]);
     return res.rows.map(r => r.url);
+}
+
+async function getPushedTodayCount(client) {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const query = `
+        SELECT COUNT(*) as count FROM page_indexing
+        WHERE last_pushed_at >= $1
+    `;
+    const res = await client.query(query, [startOfToday]);
+    return parseInt(res.rows[0].count, 10);
 }
 
 async function updateUrlStatus(client, url, status, errorMessage = null) {
@@ -67,15 +79,54 @@ async function main() {
     await client.connect();
 
     try {
-        console.log(`Querying ${URLS_PER_GROUP} URLs for each group (A, B, C)...`);
-        const groupA = await getBatchFromDB(client, 'A', URLS_PER_GROUP);
-        const groupB = await getBatchFromDB(client, 'B', URLS_PER_GROUP);
-        const groupC = await getBatchFromDB(client, 'C', URLS_PER_GROUP);
+        console.log("Checking remaining daily quota for Leslie's GSC pushes...");
+        const pushedToday = await getPushedTodayCount(client);
+        console.log(`Already pushed today: ${pushedToday}`);
+        const dailyLimit = 200;
+        const remainingQuota = Math.max(0, dailyLimit - pushedToday);
+        console.log(`Remaining quota for today: ${remainingQuota}`);
 
-        const urlsToPush = [...groupA, ...groupB, ...groupC];
-        console.log(`Found ${groupA.length} for Group A.`);
-        console.log(`Found ${groupB.length} for Group B.`);
-        console.log(`Found ${groupC.length} for Group C.`);
+        if (remainingQuota === 0) {
+            console.log("Daily quota of 200 already reached today. Exiting.");
+            return;
+        }
+
+        console.log(`Querying URLs for each group (A, B, C)...`);
+        let urlsToPush = [];
+        const groups = ['A', 'B', 'C'];
+        
+        // Dynamic allocation to ensure we hit the full remainingQuota
+        let remaining = remainingQuota;
+        
+        // 1st Pass: Get equal distribution of remaining
+        let limitPerGroup = Math.floor(remaining / 3);
+        let rem = remaining % 3;
+        
+        const groupA = await getBatchFromDB(client, 'A', limitPerGroup + (rem > 0 ? 1 : 0));
+        const groupB = await getBatchFromDB(client, 'B', limitPerGroup + (rem > 1 ? 1 : 0));
+        const groupC = await getBatchFromDB(client, 'C', limitPerGroup);
+        
+        urlsToPush = [...groupA, ...groupB, ...groupC];
+        remaining -= urlsToPush.length;
+        
+        // 2nd Pass: If we still have remaining quota, pull from any group that still has pending URLs
+        if (remaining > 0) {
+            console.log(`Dynamic Fill: Distributing remaining ${remaining} quota...`);
+            const existingUrls = new Set(urlsToPush);
+            for (const group of groups) {
+                if (remaining <= 0) break;
+                const extraUrls = await getBatchFromDB(client, group, remaining + 100);
+                for (const url of extraUrls) {
+                    if (remaining <= 0) break;
+                    if (!existingUrls.has(url)) {
+                        urlsToPush.push(url);
+                        existingUrls.add(url);
+                        remaining--;
+                    }
+                }
+            }
+        }
+
         console.log(`Total batch to push today: ${urlsToPush.length}`);
 
         if (urlsToPush.length === 0) {
