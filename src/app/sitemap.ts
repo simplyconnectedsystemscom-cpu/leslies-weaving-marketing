@@ -29,11 +29,17 @@ export async function generateSitemaps() {
   return sitemaps;
 }
 
-export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
-  let sitemapId = parseInt(String(id), 10);
+export default async function sitemap(props: any): Promise<MetadataRoute.Sitemap> {
+  const rawId = props ? props.id : undefined;
+  const resolvedId = rawId && typeof rawId === 'object' && typeof rawId.then === 'function'
+    ? await rawId
+    : rawId;
+  
+  let sitemapId = parseInt(String(resolvedId), 10);
   if (isNaN(sitemapId)) {
     sitemapId = 0;
   }
+  console.log("Next.js sitemap dynamic chunk ID parsed as:", sitemapId);
 
   const startOffset = sitemapId * CHUNK_SIZE;
   const endOffset = startOffset + CHUNK_SIZE;
