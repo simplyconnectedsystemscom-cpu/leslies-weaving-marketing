@@ -30,7 +30,12 @@ export async function generateSitemaps() {
 }
 
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
-  const startOffset = id * CHUNK_SIZE;
+  let sitemapId = parseInt(String(id), 10);
+  if (isNaN(sitemapId)) {
+    sitemapId = 0;
+  }
+
+  const startOffset = sitemapId * CHUNK_SIZE;
   const endOffset = startOffset + CHUNK_SIZE;
 
   const now = new Date();
