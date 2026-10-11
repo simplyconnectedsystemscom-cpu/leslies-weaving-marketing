@@ -1,8 +1,19 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
+import Image from "next/image";
 import { CITIES, KEYWORDS, getLocationPageBySlug } from "@/data/locations";
 import ConsultationForm from "../../fabric/[city]/[keyword]/ConsultationForm";
+
+function getFallbackRedirect(slug: string): string {
+  for (const c of CITIES) {
+    const citySlug = c.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    if (slug.startsWith(citySlug)) {
+      return `/locations/by-city/${citySlug}`;
+    }
+  }
+  return "/locations";
+}
 
 // Force Next.js to 404 any route not explicitly returned by generateStaticParams
 export const dynamicParams = true;
@@ -51,7 +62,7 @@ export async function generateMetadata({
   const pageData = getLocationPageBySlug(slug);
 
   if (!pageData) {
-    notFound();
+    permanentRedirect(getFallbackRedirect(slug));
   }
 
   const title = getShortTitle(pageData.keyword, pageData.city);
@@ -88,7 +99,7 @@ export default async function LocationPage({
   const pageData = getLocationPageBySlug(slug);
 
   if (!pageData) {
-    notFound();
+    permanentRedirect(getFallbackRedirect(slug));
   }
 
   const displayCity = pageData.city;
@@ -98,7 +109,7 @@ export default async function LocationPage({
 
   const pageDef = CITIES.find(c => c.city.toLowerCase() === pageData.city.toLowerCase());
   if (!pageDef) {
-    notFound();
+    permanentRedirect(getFallbackRedirect(slug));
   }
 
   const citySlug = pageDef.city.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -112,7 +123,14 @@ export default async function LocationPage({
       {/* ── 1. Captured Introduction (Hero) ─────────────────────────────────── */}
       <section className="relative overflow-hidden flex flex-col justify-center" style={{ height: '100dvh', scrollSnapAlign: 'start' }}>
         <div className="absolute inset-0">
-          <img src={IMG_HERO_LOOM} alt="Leslie's weaving loom" className="w-full h-full object-cover object-top" />
+          <Image
+            src={IMG_HERO_LOOM}
+            alt="Leslie's weaving loom"
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover object-top"
+          />
           {/* Very light base wash just to help the stats bar at the bottom */}
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 0%, transparent 60%, oklch(0.12 0.02 55 / 0.85) 100%)" }} />
         </div>

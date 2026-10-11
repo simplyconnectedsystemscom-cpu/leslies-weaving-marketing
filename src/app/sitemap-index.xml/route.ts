@@ -13,7 +13,7 @@ export async function GET() {
   });
   await client.connect();
   const countRes = await client.query(
-    "SELECT COUNT(*) as count FROM page_indexing WHERE slug_category IN ('location', 'fabric')"
+    "SELECT COUNT(*) as count FROM page_indexing WHERE is_active = 1 AND slug_category IN ('location', 'fabric')"
   );
   await client.end();
 

@@ -6,6 +6,9 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Studio Locations Directory | Leslie's Weaving",
   description: "Browse our South Florida service locations and bespoke fabric specifications. Seam-free 100% cotton handwoven fabric.",
+  alternates: {
+    canonical: "https://www.lesliesweavingstudio.com/locations",
+  },
   openGraph: {
     title: "Studio Locations Directory | Leslie's Weaving",
     description: "Browse our South Florida service locations and bespoke fabric specifications. Seam-free 100% cotton handwoven fabric.",

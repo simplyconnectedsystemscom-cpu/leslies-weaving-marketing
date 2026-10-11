@@ -35,8 +35,15 @@ async function getBatchFromDB(client, group, limit) {
     const query = `
         SELECT url FROM page_indexing
         WHERE ab_group = $1 
+          AND (status IS NULL OR status != 'success')
           AND (last_pushed_at IS NULL OR last_pushed_at <= NOW() - INTERVAL '${PUSH_COOLDOWN_DAYS} days')
-        ORDER BY last_pushed_at ASC NULLS FIRST
+        ORDER BY 
+          CASE 
+            WHEN status = 'failed' THEN 0 
+            WHEN status = 'pending' THEN 1 
+            ELSE 2 
+          END ASC,
+          last_pushed_at ASC NULLS FIRST
         LIMIT $2
     `;
     const res = await client.query(query, [group, limit]);
@@ -61,6 +68,24 @@ async function updateUrlStatus(client, url, status, errorMessage = null) {
         WHERE url = $3
     `;
     await client.query(query, [status, errorMessage, url]);
+}
+
+async function checkIsIndexed(authClient, siteUrl, url) {
+    try {
+        const searchconsole = google.searchconsole({ version: 'v1', auth: authClient });
+        const res = await searchconsole.urlInspection.index.inspect({
+            requestBody: {
+                inspectionUrl: url,
+                siteUrl: siteUrl
+            }
+        });
+        const verdict = res.data.inspectionResult?.indexStatusResult?.verdict;
+        console.log(`[GSC Inspection] ${url} - Verdict: ${verdict}`);
+        return verdict === 'PASS' || verdict === 'PARTIAL';
+    } catch (err) {
+        console.error(`[GSC Inspection Failed] ${url} - ${err.message}`);
+        return false;
+    }
 }
 
 async function main() {
@@ -163,10 +188,22 @@ async function main() {
         });
 
         let successCount = 0;
+        let skipCount = 0;
         let failCount = 0;
+        const siteUrl = 'https://www.lesliesweavingstudio.com/';
 
         for (const url of urlsToPush) {
             try {
+                console.log(`Checking if URL is already indexed: ${url}`);
+                const isIndexed = await checkIsIndexed(oauth2Client, siteUrl, url);
+                if (isIndexed) {
+                    console.log(`[ALREADY INDEXED] Skipping push for ${url}`);
+                    await updateUrlStatus(client, url, 'success');
+                    skipCount++;
+                    continue;
+                }
+
+                console.log(`Not indexed. Submitting to Google Indexing API: ${url}`);
                 await oauth2Client.request({
                     url: 'https://indexing.googleapis.com/v3/urlNotifications:publish',
                     method: 'POST',
@@ -188,11 +225,11 @@ async function main() {
                 }
             }
             
-            // Sleep to avoid rate limits
-            await new Promise(r => setTimeout(r, 500));
+            // Sleep 1 second to stay clean under Search Console & Indexing API rate limits
+            await new Promise(r => setTimeout(r, 1000));
         }
         
-        console.log(`\nBatch Complete! Successfully pushed: ${successCount} | Failed: ${failCount}`);
+        console.log(`\nBatch Complete! Successfully pushed: ${successCount} | Skipped (Already Indexed): ${skipCount} | Failed: ${failCount}`);
 
     } catch (e) {
         console.error("Script failed:", e.message);

@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import Image from "next/image";
 import { KEYWORDS } from "@/data/locations";
 import ConsultationForm from "../../../[city]/[keyword]/ConsultationForm";
 
-export const dynamicParams = false; // Only allow the pre-generated static params
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return [
@@ -43,7 +44,7 @@ export async function generateMetadata({
   const kw = KEYWORDS.find(k => k.slug === keyword);
 
   if (!kw) {
-    notFound();
+    permanentRedirect("/locations");
   }
 
   const title = getShortTitle(kw.keyword, "the United States");
@@ -80,7 +81,7 @@ export default async function NationalFabricPage({
   const kw = KEYWORDS.find(k => k.slug === keyword);
 
   if (!kw) {
-    notFound();
+    permanentRedirect("/locations");
   }
 
   const displayKeyword = kw.keyword;
@@ -100,7 +101,14 @@ export default async function NationalFabricPage({
       {/* ── 1. Hero Section ─────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden flex flex-col justify-center" style={{ height: '100dvh', scrollSnapAlign: 'start' }}>
         <div className="absolute inset-0">
-          <img src={IMG_HERO_LOOM} alt="Leslie's weaving loom" className="w-full h-full object-cover object-top" />
+          <Image
+            src={IMG_HERO_LOOM}
+            alt="Leslie's weaving loom"
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover object-top"
+          />
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 0%, transparent 60%, oklch(0.12 0.02 55 / 0.85) 100%)" }} />
         </div>
 

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import Image from "next/image";
 import { CITIES, KEYWORDS, getLocationPageBySlug } from "@/data/locations";
 import ConsultationForm from "./ConsultationForm";
 import seoOptimizations from "../../../../../seo_operations/seo-optimizations.json";
@@ -89,7 +90,12 @@ export async function generateMetadata({
   const pageData = getLocationPageBySlug(fullSlug);
 
   if (!pageData) {
-    notFound();
+    const kw = KEYWORDS.find(k => k.slug === keyword);
+    if (kw) {
+      permanentRedirect(`/fabric/national/interior/${keyword}`);
+    } else {
+      permanentRedirect("/locations");
+    }
   }
 
   const path = `/fabric/${city}/${keyword}`;
@@ -153,7 +159,12 @@ export default async function FabricLandingPage({
   const pageData = getLocationPageBySlug(fullSlug);
 
   if (!pageData) {
-    notFound();
+    const kw = KEYWORDS.find(k => k.slug === keyword);
+    if (kw) {
+      permanentRedirect(`/fabric/national/interior/${keyword}`);
+    } else {
+      permanentRedirect("/locations");
+    }
   }
 
   const path = `/fabric/${city}/${keyword}`;
@@ -166,7 +177,7 @@ export default async function FabricLandingPage({
 
   const pageDef = CITIES.find(c => c.city.toLowerCase() === pageData.city.toLowerCase());
   if (!pageDef) {
-    notFound();
+    permanentRedirect("/locations");
   }
 
   const neighborCities = pageDef.neighbors
@@ -180,7 +191,14 @@ export default async function FabricLandingPage({
       {/* ── 1. Captured Introduction (Hero) ─────────────────────────────────── */}
       <section className="relative overflow-hidden flex flex-col justify-center" style={{ height: '100dvh', scrollSnapAlign: 'start' }}>
         <div className="absolute inset-0">
-          <img src={IMG_HERO_LOOM} alt="Leslie's weaving loom" className="w-full h-full object-cover object-top" />
+          <Image
+            src={IMG_HERO_LOOM}
+            alt="Leslie's weaving loom"
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover object-top"
+          />
           {/* Very light base wash just to help the stats bar at the bottom */}
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 0%, transparent 60%, oklch(0.12 0.02 55 / 0.85) 100%)" }} />
         </div>

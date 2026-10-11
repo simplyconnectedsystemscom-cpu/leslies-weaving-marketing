@@ -13,7 +13,7 @@ export async function generateSitemaps() {
   });
   await client.connect();
   const countRes = await client.query(
-    "SELECT COUNT(*) as count FROM page_indexing WHERE slug_category IN ('location', 'fabric')"
+    "SELECT COUNT(*) as count FROM page_indexing WHERE is_active = 1 AND slug_category IN ('location', 'fabric')"
   );
   await client.end();
 
@@ -111,7 +111,7 @@ export default async function sitemap(props: any): Promise<MetadataRoute.Sitemap
     
     await client.connect();
     const res = await client.query(
-      "SELECT url, updated_at FROM page_indexing WHERE slug_category IN ('location', 'fabric') ORDER BY id ASC LIMIT $1 OFFSET $2",
+      "SELECT url, updated_at FROM page_indexing WHERE is_active = 1 AND slug_category IN ('location', 'fabric') ORDER BY id ASC LIMIT $1 OFFSET $2",
       [dbLimit, dbOffset]
     );
     await client.end();
